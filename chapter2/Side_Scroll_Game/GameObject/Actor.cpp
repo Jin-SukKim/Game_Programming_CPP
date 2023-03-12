@@ -1,17 +1,15 @@
-#include "Actor.hpp"
-#include "Game.hpp"
-#include "Component.hpp"
+#include "PreCompiled.hpp"
 
 // 의존성 주입(dependency injection) 접근법 사용
-Actor::Actor(Game* game) : mState(EActive), mPosition(Vector2::Zero),
-							mScale(1.f), mRotation(0.f), mGame(game) {
+Actor::Actor(Game* game) : mState(EActive), mPosition(Vector2d::Zero),
+mScale(1.f), mRotation(0.f), mGame(game) {
 	mGame->AddActor(this);
 }
 
 Actor::~Actor() {
 	// Actor를 Game에서 삭제
 	mGame->RemoveActor(this);
-	
+
 	// 컴포넌트를 삭제해준다.
 	while (!mComponents.empty()) {
 		delete mComponents.back();

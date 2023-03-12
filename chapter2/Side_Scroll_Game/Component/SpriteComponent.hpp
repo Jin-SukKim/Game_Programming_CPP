@@ -1,11 +1,12 @@
+#pragma once
 #include "Component.hpp"
 #include <SDL.h>
-#include "Math.hpp"
+#include "MathUtils.hpp"
 
 class SpriteComponent : public Component {
 public:
 	// 그리기 순석밧이 낮을수록 더 뒤쪽에서 그린다
-	SpriteComponent(Actor* owner, int drawOrder = 100);
+	SpriteComponent(class Actor* owner, int drawOrder = 100);
 	~SpriteComponent();
 	// 스프라이트를 그리기 위한 랜더러를 받는 Draw 함수
 	virtual void Draw(SDL_Renderer* renderer);

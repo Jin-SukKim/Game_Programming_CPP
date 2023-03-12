@@ -1,10 +1,9 @@
 #pragma once
 #include <SDL.h> // SDL_Windows 포인터 참조
+#include <SDL_image.h> // SDL_Img
 #include <vector>
 #include <unordered_map>
 #include <string>
-#include "Actor.hpp"
-#include "SpriteComponent.hpp"
 
 class Game {
 private:
@@ -24,22 +23,25 @@ private:
 	Uint32 mTicksCount;
 
 	// 활성화된 Actor
-	std::vector<Actor*> mActors;
+	std::vector<class Actor*> mActors;
 	// 대기 중인 Actor
-	std::vector<Actor*> mPendingActors;
+	std::vector<class Actor*> mPendingActors;
 	// 어느 vector에 actor를 추가할 지 갱신 여부 확인
 	bool mUpdatingActors;
 
 	// 모든 ACtor를 생성한다.
-	void loadData();
+	void LoadData();
 	// 데이터 삭제하기
-	void unloadData();
+	void UnLoadData();
 
 	// 텍스쳐 관리용 맵
 	std::unordered_map<std::string, SDL_Texture*> mTextures;
 
 	// 게임에 그려야할 스프라이트
-	std::vector<SpriteComponent*> mSprites;
+	std::vector<class SpriteComponent*> mSprites;
+
+	// Ship 스프라이트
+	class Ship* mShip;
 public:
 	// constructor
 	Game();
@@ -50,8 +52,8 @@ public:
 	// 게임 종료
 	void ShutDown();
 
-	void AddActor(Actor* actor);
-	void RemoveActor(Actor* actor);
+	void AddActor(class Actor* actor);
+	void RemoveActor(class Actor* actor);
 
 	// 이미지 로딩 과정 캡슐화
 	SDL_Texture* LoadTexture(const char* fileName);
@@ -59,8 +61,8 @@ public:
 	SDL_Texture* GetTexture(const std::string& fileName);
 
 	// mDrawOrder 순서로 스프라이트 정렬해 저장
-	void AddSprite(SpriteComponent* sprite);
+	void AddSprite(class SpriteComponent* sprite);
 	// 스프라이트 삭제
-	void RemoveSprite(SpriteComponent* sprite);
+	void RemoveSprite(class SpriteComponent* sprite);
 
 };

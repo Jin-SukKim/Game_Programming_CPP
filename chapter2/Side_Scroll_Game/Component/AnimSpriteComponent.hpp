@@ -1,9 +1,9 @@
 #pragma once
 #include "SpriteComponent.hpp"
 
-class AnimeSpriteComponent : public SpriteComponent {
-public :
-	AnimeSpriteComponent(Actor* owner, int drawOrder = 100);
+class AnimSpriteComponent : public SpriteComponent {
+public:
+	AnimSpriteComponent(class Actor* owner, int drawOrder = 100);
 	// 애니메이션을 프레임마다 갱신
 	void Update(float deltaTime) override; // Compoenent의 업데이트 override
 	// 애니메이션에 사용되는 텍스처 설정
@@ -23,5 +23,5 @@ private:
 	float mCurrFrame;
 	// 애니메이션 프레임 레이트
 	float mAnimFPS;
-	
+
 };

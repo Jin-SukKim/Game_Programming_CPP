@@ -1,6 +1,4 @@
-#include <SDL_image.h>
-#include "Game.hpp"
-#include "Actor.hpp"
+#include "PreCompiled.hpp"
 
 const int thickness = 15;
 const float paddleH = 100.f;
@@ -15,9 +13,9 @@ bool Game::Initialize() {
 		(Audio, Video, Haptic(force feedback), Gamecontrollor etc)
 
 		정수값을 return, 0이 아니면 초기화가 실패했다는 것이다.
-	*/ 
+	*/
 	int sdlResult = SDL_Init(SDL_INIT_VIDEO); // 비디오 서브시스템만 초기화
-	
+
 
 	// 0이 아니면 초기화 실패로 false return
 	if (sdlResult != 0) {
@@ -28,7 +26,7 @@ bool Game::Initialize() {
 	}
 
 	sdlResult = IMG_Init(IMG_INIT_PNG); // 이미지 초기화
-	if (sdlResult != 0) {
+	if (sdlResult == 0) {
 		SDL_Log("Unable to initialize IMG : %s", SDL_GetError());
 		return false;
 	}
@@ -36,11 +34,11 @@ bool Game::Initialize() {
 	/*	윈도우 생성
 		파라미터 종류	 :
 			제목, 배치될 x/y 좌표(왼쪽 상단 구석 기준),
-			너비와 높이, 생성 관련 플래그) 
+			너비와 높이, 생성 관련 플래그)
 
 		플래그 종류 : 전체화면, 현재 모니터 해상도로 전체화면, opengl 라이브러리 지원추가, 크기 조절
 	*/
-	mWindow = SDL_CreateWindow("Game Programming in C++ (Chapter 1) - pong game",	// 윈도우 제목
+	mWindow = SDL_CreateWindow("Game Programming in C++ (Chapter 2) - Side Scroll Game",	// 윈도우 제목
 		100,	// 윈도우 좌측 상단 x좌표
 		100,	// 윈도우 좌측 상단 y좌표
 		1024,	// 윈도우 너비
@@ -54,8 +52,8 @@ bool Game::Initialize() {
 		return false;
 	}
 
-	/*	파라미터: 
-	*	윈도우의 포인터, 
+	/*	파라미터:
+	*	윈도우의 포인터,
 	*	어떤 그래픽 카드를 사용할지(-1은 default로 SDL이 선택)
 	*	초기화 플래그(가속화된 렌더러(그래픽 하드웨어 활용), 수직 동기화 활성화 여부)
 	*/
@@ -70,12 +68,16 @@ bool Game::Initialize() {
 		return false;
 	}
 
+	LoadData();
+	mTicksCount = SDL_GetTicks();
 	// SDL 초기화와 윈도우 생성
 	return true;
 }
 
 // 게임 종료를 위해 SDL을 닫는다.
 void Game::ShutDown() {
+	UnLoadData();
+	IMG_Quit();
 	// 렌더러 해제
 	SDL_DestroyRenderer(mRenderer);
 	// SDL_Window 객체를 해제한다.
@@ -85,8 +87,8 @@ void Game::ShutDown() {
 }
 
 void Game::ProcessInput() {
-	
-	SDL_Event event; 
+
+	SDL_Event event;
 
 	// 이벤트 큐는 트겆ㅇ 프레임에서 여러 이벤트를 포함할 수 있어
 	// 모든 이벤트를 조회하며 다뤄야한다.
@@ -107,6 +109,9 @@ void Game::ProcessInput() {
 	if (state[SDL_SCANCODE_ESCAPE]) {
 		mIsRunning = false;
 	}
+
+	// Ship 입력
+	mShip->ProcessKeyboard(state);
 
 }
 
@@ -135,7 +140,7 @@ void Game::UpdateGame() {
 		// actor의 component와 actor를 갱신
 		actor->Update(deltaTime);
 	}
-	mUpdatingActors =  false;
+	mUpdatingActors = false;
 
 	// 대기 중인 Actor를 mActors로 이동
 	for (auto pending : mPendingActors) {
@@ -157,7 +162,7 @@ void Game::UpdateGame() {
 		delete actor;
 	}
 
-	
+
 }
 
 void Game::GenerateOutput() {
@@ -174,7 +179,7 @@ void Game::GenerateOutput() {
 	SDL_RenderClear(mRenderer);
 
 	// 전체 게임 장면 그리기
-	
+
 	// 스프라이트 컴포넌트 전부 그려주기
 	for (auto sprite : mSprites) {
 		sprite->Draw(mRenderer);
@@ -250,7 +255,7 @@ SDL_Texture* Game::GetTexture(const std::string& fileName) {
 	auto iter = mTextures.find(fileName);
 	if (iter != mTextures.end()) {
 		// 맵에 존재한다면 SDL_Texture에 바로 return
-		tex = iter->second; 
+		tex = iter->second;
 	}
 	// 맵에 없다면 텍스쳐를 로드한다.
 	else {
@@ -262,12 +267,40 @@ SDL_Texture* Game::GetTexture(const std::string& fileName) {
 }
 
 // Game의 모든 Actor를 생성한다.
-void Game::loadData() {
+void Game::LoadData() {
+	// Player's ship 만들기
+	mShip = new Ship(this);
+	mShip->SetPosition(Vector2d(100.f, 384.f));
+	mShip->SetScale(1.5f);
 
+	// Actor의 배경 그리기
+	Actor* temp = new Actor(this);
+	temp->SetPosition(Vector2d(512.f, 384.f));
+
+	// 멀리 있는 배경그리기
+	BGSpriteComponent* bg = new BGSpriteComponent(temp);
+	bg->SetScreenSize(Vector2d(1024.f, 768.f));
+	std::vector<SDL_Texture*> bgTexs = {
+		GetTexture("Assets/Farback01.png"),
+		GetTexture("Assets/Farback02.png")
+	};
+
+	bg->SetBGTextures(bgTexs);
+	bg->SetScrollSpeed(-100.f);
+
+	// 가까운 배경 그리기
+	bg = new BGSpriteComponent(temp, 50);
+	bg->SetScreenSize(Vector2d(1024.f, 768.f));
+	bgTexs = {
+		GetTexture("Assets/Stars.png"),
+		GetTexture("Assets/Stars.png")
+	};
+	bg->SetBGTextures(bgTexs);
+	bg->SetScrollSpeed(-200.f);
 }
 
 
-void Game::unloadData() {
+void Game::UnLoadData() {
 	// ~Actor 함수가 RemoveActor를 호출하므로 다른 스타일의 루프를 사용
 	// actor 포인터 메모리 삭제
 	while (!mActors.empty()) {

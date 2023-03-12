@@ -1,9 +1,7 @@
 #pragma once
 #include <vector>
+#include "Vector2d.hpp"
 #include "Game.hpp"
-#include "Component.hpp"
-#include "Vector2.hpp"
-using namespace Math;
 
 // 게임 객체 모델의 기본 클래스
 class Actor {
@@ -18,17 +16,18 @@ public:
 	virtual ~Actor();
 
 	// Setters
-	void SetPosition(const Vector2& pos) { mPosition = pos; }
+	void SetPosition(const Vector2d& pos) { mPosition = pos; }
 	void SetState(State state) { mState = state; }
 	void SetScale(float scale) { mScale = scale; }
 	void SetRotation(float rotation) { mRotation = rotation; }
 
 	// Getters
 	State GetState() const { return mState; }
-	const Vector2 GetPosition() const { return mPosition; }
+	const Vector2d GetPosition() const { return mPosition; }
 	float GetScale() const { return mScale; }
-	float GetRotation() const {	return mRotation; }
-	Game* GetGame() { return mGame; }
+	float GetRotation() const { return mRotation; }
+
+	class Game* GetGame() { return mGame; }
 
 	// Game에서 호출하는 Update 함수
 	void Update(float deltaTime);
@@ -39,18 +38,18 @@ public:
 	virtual void UpdateActor(float deltaTime) {}
 
 	// 컴포넌트 추가/제거
-	void AddComponent(Component* component);
-	void RemoveComponent(Component* component);
+	void AddComponent(class Component* component);
+	void RemoveComponent(class Component* component);
 private:
 	// Actor의 상태
 	State mState;
 	// 변환
-	Vector2 mPosition;	// Actor의 중심점
+	Vector2d mPosition;	// Actor의 중심점
 	float mScale;		// Actor의 배율(100%의 경우 1.f)
 	float mRotation;	// 회전 각도 (Radian)
 
 	// Actor가 보유한 컴포넌트들
-	std::vector<Component*> mComponents;
-	Game* mGame;
-	
+	std::vector<class Component*> mComponents;
+	class Game* mGame;
+
 };

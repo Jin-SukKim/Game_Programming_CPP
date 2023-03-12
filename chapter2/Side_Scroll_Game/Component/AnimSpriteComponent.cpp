@@ -1,11 +1,11 @@
-#include "AnimeSpriteComponent.hpp"
+#include "AnimSpriteComponent.hpp"
 
-AnimeSpriteComponent::AnimeSpriteComponent(Actor* owner, int drawOrder)
+AnimSpriteComponent::AnimSpriteComponent(class Actor* owner, int drawOrder)
 	: SpriteComponent(owner), mCurrFrame(0.f), mAnimFPS(24.f) {}
- 
-void AnimeSpriteComponent::SetAnimTextures(const std::vector<SDL_Texture*>& textures) {
+
+void AnimSpriteComponent::SetAnimTextures(const std::vector<SDL_Texture*>& textures) {
 	mAnimTextures = textures;
-	
+
 	if (mAnimTextures.size() > 0) {
 		// 첫 번째 프레임을 설정한다.
 		mCurrFrame = 0.f; // 초기화
@@ -13,7 +13,9 @@ void AnimeSpriteComponent::SetAnimTextures(const std::vector<SDL_Texture*>& text
 	}
 }
 
-void AnimeSpriteComponent::Update(float deltaTime) {
+void AnimSpriteComponent::Update(float deltaTime) {
+	SpriteComponent::Update(deltaTime);
+
 	if (mAnimTextures.size() > 0) {
 		// 프레임 레이트와 delta time을 기반으로
 		// 현재 프레임 갱신

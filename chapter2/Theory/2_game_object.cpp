@@ -1,4 +1,9 @@
-/*
+/*  
+    Chapter 2 asset sprite images are created by Jacob Zinman_Jeanes, CC BY License
+
+    Chapter2  코드는 하이브리드 Actor/Component 모델, SpriteComponent,
+    AnimSpriteCompoentn, 시간차 스크롤의 구현을 포함한다.
+    
     (Chapter 2에선 입력장치는 신경쓰지 않고 있다.)
     매우 간단한 게임은 하나의 Game 클래스로 구현할 수 있지만
     게임 크기가 커지면 좋지 않다.

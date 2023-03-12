@@ -1,7 +1,7 @@
 #include "SpriteComponent.hpp"
 
 SpriteComponent::SpriteComponent(Actor* owner, int drawOrder) :
-	Component(owner), mTexture(nullptr), mDrawOrder(0), mTexWidth(0), mTexHeight(0)
+	Component(owner), mTexture(nullptr), mDrawOrder(drawOrder), mTexWidth(0), mTexHeight(0)
 {
 	mOwner->GetGame()->AddSprite(this);
 }
@@ -57,7 +57,7 @@ void SpriteComponent::Draw(SDL_Renderer* renderer) {
 			&r,
 			// SDL는 Degree를 사용하는데 Actor는 Radian을 사용한다.
 			// SDL에서 양의 각도는 시계 방향인데 단위 원(반시계 방향)과 반대다.
-			-Math::MathUtils::ToDegrees(mOwner->GetRotation()), // 라디안을 각도로 변환, 각도 반전
+			-MathUtils::ToDegrees(mOwner->GetRotation()), // 라디안을 각도로 변환, 각도 반전
 			nullptr,
 			SDL_FLIP_NONE
 		);
