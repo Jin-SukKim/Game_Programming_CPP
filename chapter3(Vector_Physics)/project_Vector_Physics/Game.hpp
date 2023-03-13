@@ -37,6 +37,9 @@ private:
 
 	// Ship 스프라이트
 	class Ship* mShip;
+
+	// 운석 스프라이트
+	class Asteroid* mAsteroid;
 public:
 	// constructor
 	Game();

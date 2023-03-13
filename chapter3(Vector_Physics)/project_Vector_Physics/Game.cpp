@@ -273,30 +273,12 @@ void Game::LoadData() {
 	mShip->SetPosition(Vector2d(100.f, 384.f));
 	mShip->SetScale(1.5f);
 
-	// Actor의 배경 그리기
-	Actor* temp = new Actor(this);
-	temp->SetPosition(Vector2d(512.f, 384.f));
-
-	// 멀리 있는 배경그리기
-	BGSpriteComponent* bg = new BGSpriteComponent(temp);
-	bg->SetScreenSize(Vector2d(1024.f, 768.f));
-	std::vector<SDL_Texture*> bgTexs = {
-		GetTexture("Assets/Farback01.png"),
-		GetTexture("Assets/Farback02.png")
-	};
-
-	bg->SetBGTextures(bgTexs);
-	bg->SetScrollSpeed(-100.f);
-
-	// 가까운 배경 그리기
-	bg = new BGSpriteComponent(temp, 50);
-	bg->SetScreenSize(Vector2d(1024.f, 768.f));
-	bgTexs = {
-		GetTexture("Assets/Stars.png"),
-		GetTexture("Assets/Stars.png")
-	};
-	bg->SetBGTextures(bgTexs);
-	bg->SetScrollSpeed(-200.f);
+	// Create asteroids
+	const int numAsteroids = 20;
+	for (int i = 0; i < numAsteroids; i++)
+	{
+		new Asteroid(this);
+	}
 }
 
 

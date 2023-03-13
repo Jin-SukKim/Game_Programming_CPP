@@ -8,12 +8,14 @@
 #include <unordered_map>
 #include <string>
 #include <algorithm>
+#include <random>
 
 #include "GameMath\MathUtils.hpp"
 #include "GameMath\Vector2d.hpp"
 #include "GameMath\Matrix3x3.hpp"
 #include "Vector3d.hpp"
 #include "Matrix4x4.hpp"
+#include "Random.hpp"
 
 #include "Component\Component.hpp"
 #include "GameObject\Actor.hpp"
