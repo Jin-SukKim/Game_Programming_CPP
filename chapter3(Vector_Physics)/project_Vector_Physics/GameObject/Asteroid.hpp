@@ -1,10 +1,11 @@
 class Asteroid : public Actor {
 public:
 	Asteroid(class Game* game);
-	//~Asteroid();
+	~Asteroid();
 
-	//class CircleComponent* GetCircle();
-
+	class CircleComponent* GetCircle() {
+		return mCircle;
+	}
 private:
-	//class CircleComponent* mCircle;
+	class CircleComponent* mCircle;
 };

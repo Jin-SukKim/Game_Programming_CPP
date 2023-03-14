@@ -68,6 +68,8 @@ bool Game::Initialize() {
 		return false;
 	}
 
+	Random::Init();
+
 	LoadData();
 	mTicksCount = SDL_GetTicks();
 	// SDL 초기화와 윈도우 생성
@@ -276,6 +278,31 @@ SDL_Texture* Game::GetTexture(const std::string& fileName) {
 
 // Game의 모든 Actor를 생성한다.
 void Game::LoadData() {
+	// Actor의 배경 그리기
+	Actor* temp = new Actor(this);
+	temp->SetPosition(Vector2d(512.f, 384.f));
+
+	// 멀리 있는 배경그리기
+	BGSpriteComponent* bg = new BGSpriteComponent(temp);
+	bg->SetScreenSize(Vector2d(1024.f, 768.f));
+	std::vector<SDL_Texture*> bgTexs = {
+		GetTexture("Assets/Farback01.png"),
+		GetTexture("Assets/Farback02.png")
+	};
+
+	bg->SetBGTextures(bgTexs);
+	bg->SetScrollSpeed(-100.f);
+
+	// 가까운 배경 그리기
+	bg = new BGSpriteComponent(temp, 50);
+	bg->SetScreenSize(Vector2d(1024.f, 768.f));
+	bgTexs = {
+		GetTexture("Assets/Stars.png"),
+		GetTexture("Assets/Stars.png")
+	};
+	bg->SetBGTextures(bgTexs);
+	bg->SetScrollSpeed(-200.f);
+
 	// Player's ship 만들기
 	mShip = new Ship(this);
 	mShip->SetPosition(Vector2d(100.f, 384.f));
@@ -324,4 +351,16 @@ void Game::RemoveSprite(SpriteComponent* sprite) {
 	// swap은 순서를 망가트리므로 하지 못한다.
 	auto iter = std::find(mSprites.begin(), mSprites.end(), sprite);
 	mSprites.erase(iter);
+}
+
+void Game::AddAsteroid(Asteroid* ast) {
+	mAsteroids.emplace_back(ast);
+}
+
+void Game::RemoveAsteroid(Asteroid* ast) {
+	auto iter = std::find(mAsteroids.begin(), mAsteroids.end(), ast);
+
+	if (iter != mAsteroids.end()) {
+		mAsteroids.erase(iter);
+	}
 }

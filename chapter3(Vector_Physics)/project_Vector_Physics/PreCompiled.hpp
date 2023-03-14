@@ -26,8 +26,11 @@
 #include "Component\SpriteComponent.hpp"
 #include "Component\AnimSpriteComponent.hpp"
 #include "Component\BGSpriteComponent.hpp"
+#include "CircleCompoenent.hpp"
 
+#include "Laser.hpp"
 #include "GameObject\Ship.hpp"
 #include "Asteroid.hpp"
+
 
 #include "Game.hpp"

@@ -39,7 +39,7 @@ private:
 	class Ship* mShip;
 
 	// 운석 스프라이트
-	class Asteroid* mAsteroid;
+	std::vector<class Asteroid*> mAsteroids;
 public:
 	// constructor
 	Game();
@@ -62,4 +62,10 @@ public:
 	void AddSprite(class SpriteComponent* sprite);
 	// 스프라이트 삭제
 	void RemoveSprite(class SpriteComponent* sprite);
+
+	void AddAsteroid(class Asteroid* ast);
+	void RemoveAsteroid(class Asteroid* ast);
+	std::vector<class Asteroid*>& GetAsteroid() {
+		return mAsteroids;
+	}
 };

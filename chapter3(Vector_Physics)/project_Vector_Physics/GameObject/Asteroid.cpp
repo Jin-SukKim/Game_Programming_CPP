@@ -1,6 +1,6 @@
 #include "PreCompiled.hpp"
 
-Asteroid::Asteroid(Game* game) : Actor(game) {
+Asteroid::Asteroid(Game* game) : Actor(game), mCircle(nullptr) {
 	// 랜덤하게 위치와 방향을 초기화
 	Vector2d randPos = Random::GetVector(Vector2d::Zero, Vector2d(1024.f, 768.f));
 	SetPosition(randPos);
@@ -13,4 +13,16 @@ Asteroid::Asteroid(Game* game) : Actor(game) {
 	// 이동 컴포넌트 생성, 전방 속도 설정
 	MoveComponent* mc = new MoveComponent(this);
 	mc->SetFoarwardSpeed(150.f);
+
+	mCircle = new CircleComponent(this);
+	mCircle->SetRarius(40.f);
+
+	// 운석을 게임에 추가하기
+	game->AddAsteroid(this);
+
+}
+
+Asteroid::~Asteroid() {
+	GetGame()->RemoveAsteroid(this);
+
 }
