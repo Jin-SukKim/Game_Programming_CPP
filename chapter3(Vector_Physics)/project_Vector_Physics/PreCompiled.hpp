@@ -21,6 +21,7 @@
 #include "GameObject\Actor.hpp"
 
 #include "MoveComponent.hpp"
+#include "InputComponent.hpp"
 
 #include "Component\SpriteComponent.hpp"
 #include "Component\AnimSpriteComponent.hpp"

@@ -15,7 +15,7 @@ public:
 		return mForwardSpeed;
 	}
 
-	void SetAngualrSpeed(float speed) {
+	void SetAngularSpeed(float speed) {
 		mAngularSpeed = speed;
 	}
 	void SetFoarwardSpeed(float speed) {

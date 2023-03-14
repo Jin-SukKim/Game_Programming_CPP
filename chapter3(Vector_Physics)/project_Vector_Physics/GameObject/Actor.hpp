@@ -40,6 +40,12 @@ public:
 
 	// 전방 벡터
 	Vector2d GetForward();
+
+	// Game이 호출하는 ProcessInput함수
+	void ProcessInput(const uint8_t* keyState);
+	// 특정 Actor를 위한 입력 코드
+	virtual void ActorInput(const uint8_t* keyState) {};
+
 private:
 	// Actor의 상태
 	State mState;

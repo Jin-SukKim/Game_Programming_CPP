@@ -62,5 +62,4 @@ public:
 	void AddSprite(class SpriteComponent* sprite);
 	// 스프라이트 삭제
 	void RemoveSprite(class SpriteComponent* sprite);
-
 };

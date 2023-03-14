@@ -13,7 +13,9 @@ public:
 		return mUpdateOrder;
 	}
 
-	// 상속관계의 클래스끼리 공유한다.
+	virtual void ProcessInput(const uint8_t* keyState) {};
+
+// 상속관계의 클래스끼리 공유한다.
 protected:
 	// 소유자 actor
 	// 컴포넌트가 필요하다고 판단되는 변환 데이터 및 여러 정보에 접근하기 위해 Actor 포인터를 가진다.

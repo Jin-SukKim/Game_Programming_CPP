@@ -59,3 +59,16 @@ void Actor::RemoveComponent(Component* component) {
 Vector2d Actor::GetForward() {
 	return Vector2d(MathUtils::Cos(mRotation), -MathUtils::Sin(mRotation));
 }
+
+void Actor::ProcessInput(const uint8_t* keyState) {
+	// Actor의 상태의 활성화를 확인
+	if (mState == EActive) {
+		// 모든 컴포넌트의 ProcessInput을 호출
+		for (auto comp : mComponents) {
+			comp->ProcessInput(keyState);
+		}
+		// 재정의된 행위를 하도록 ActorInput을 호출
+		ActorInput(keyState);
+	}
+}
+

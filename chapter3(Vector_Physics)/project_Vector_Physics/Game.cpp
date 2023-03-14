@@ -86,6 +86,10 @@ void Game::ShutDown() {
 	SDL_Quit();
 }
 
+// ProcessInput 내부에서 Actor가 또다른 Actor를 만들거나
+// Component를 다루는 loop 앞에서는 mUpdatingActors bool 값이 True로 설정돼야 한다.
+// 새로운 Actor를 추가할 때는 mActors 대신 mPendingActors에 추가해야 한다.
+// 벡터가 반복되는 동안 mActors가 수정되지 않도록해야한다.
 void Game::ProcessInput() {
 
 	SDL_Event event;
@@ -109,9 +113,13 @@ void Game::ProcessInput() {
 	if (state[SDL_SCANCODE_ESCAPE]) {
 		mIsRunning = false;
 	}
-
-	// Ship 입력
-	mShip->ProcessKeyboard(state);
+	
+	// 모든 Actor를 반복하면서 각 Actor의 ProcessInput을 호출
+	mUpdatingActors = true;
+	for (auto actor : mActors) {
+		actor->ProcessInput(state);
+	}
+	mUpdatingActors = false;
 
 }
 
