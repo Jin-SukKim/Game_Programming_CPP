@@ -28,6 +28,7 @@
 #include "Component\AnimSpriteComponent.hpp"
 #include "Component\BGSpriteComponent.hpp"
 #include "Component\CircleCompoenent.hpp"
+#include "NavComponent.hpp"
 
 #include "AIComponent.hpp"
 #include "AIState.hpp"
