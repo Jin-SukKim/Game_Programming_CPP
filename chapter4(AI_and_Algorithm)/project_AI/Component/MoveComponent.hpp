@@ -18,7 +18,7 @@ public:
 	void SetAngularSpeed(float speed) {
 		mAngularSpeed = speed;
 	}
-	void SetFoarwardSpeed(float speed) {
+	void SetForwardSpeed(float speed) {
 		mForwardSpeed = speed;
 	}
 

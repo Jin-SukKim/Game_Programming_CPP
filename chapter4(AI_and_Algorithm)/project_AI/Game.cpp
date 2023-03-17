@@ -3,7 +3,8 @@
 const int thickness = 15;
 const float paddleH = 100.f;
 // constructor
-Game::Game() : mWindow(nullptr), mRenderer(nullptr), mIsRunning(true), mUpdatingActors(false) {};
+Game::Game() : mWindow(nullptr), mRenderer(nullptr), 
+mIsRunning(true), mUpdatingActors(false) {};
 
 // 초기화를 성공하면 true 아니면 false return
 bool Game::Initialize() {
@@ -38,7 +39,7 @@ bool Game::Initialize() {
 
 		플래그 종류 : 전체화면, 현재 모니터 해상도로 전체화면, opengl 라이브러리 지원추가, 크기 조절
 	*/
-	mWindow = SDL_CreateWindow("Game Programming in C++ (Chapter 2) - Side Scroll Game",	// 윈도우 제목
+	mWindow = SDL_CreateWindow("Game Programming in C++ (Chapter 4) - Tower Defense Game",	// 윈도우 제목
 		100,	// 윈도우 좌측 상단 x좌표
 		100,	// 윈도우 좌측 상단 y좌표
 		1024,	// 윈도우 너비
@@ -67,8 +68,6 @@ bool Game::Initialize() {
 		SDL_Log("Failed to create renderer: %s", SDL_GetError());
 		return false;
 	}
-
-	Random::Init();
 
 	LoadData();
 	mTicksCount = SDL_GetTicks();
@@ -116,6 +115,17 @@ void Game::ProcessInput() {
 		mIsRunning = false;
 	}
 	
+	if (state[SDL_SCANCODE_B]) {
+		mGrid->BuildTower();
+	}
+
+	// 마우스 상태 얻기
+	int x, y;
+	Uint32 buttons = SDL_GetMouseState(&x, &y);
+	if (SDL_BUTTON(buttons) & SDL_BUTTON_LEFT) {
+		mGrid->ProcessClick(x, y);
+	}
+
 	// 모든 Actor를 반복하면서 각 Actor의 ProcessInput을 호출
 	mUpdatingActors = true;
 	for (auto actor : mActors) {
@@ -278,42 +288,7 @@ SDL_Texture* Game::GetTexture(const std::string& fileName) {
 
 // Game의 모든 Actor를 생성한다.
 void Game::LoadData() {
-	// Actor의 배경 그리기
-	Actor* temp = new Actor(this);
-	temp->SetPosition(Vector2d(512.f, 384.f));
-
-	// 멀리 있는 배경그리기
-	BGSpriteComponent* bg = new BGSpriteComponent(temp);
-	bg->SetScreenSize(Vector2d(1024.f, 768.f));
-	std::vector<SDL_Texture*> bgTexs = {
-		GetTexture("Assets/Farback01.png"),
-		GetTexture("Assets/Farback02.png")
-	};
-
-	bg->SetBGTextures(bgTexs);
-	bg->SetScrollSpeed(-100.f);
-
-	// 가까운 배경 그리기
-	bg = new BGSpriteComponent(temp, 50);
-	bg->SetScreenSize(Vector2d(1024.f, 768.f));
-	bgTexs = {
-		GetTexture("Assets/Stars.png"),
-		GetTexture("Assets/Stars.png")
-	};
-	bg->SetBGTextures(bgTexs);
-	bg->SetScrollSpeed(-200.f);
-
-	// Player's ship 만들기
-	mShip = new Ship(this);
-	mShip->SetPosition(Vector2d(100.f, 384.f));
-	mShip->SetScale(1.5f);
-
-	// Create asteroids
-	const int numAsteroids = 20;
-	for (int i = 0; i < numAsteroids; i++)
-	{
-		new Asteroid(this);
-	}
+	mGrid = new Grid(this);
 }
 
 
@@ -353,14 +328,22 @@ void Game::RemoveSprite(SpriteComponent* sprite) {
 	mSprites.erase(iter);
 }
 
-void Game::AddAsteroid(Asteroid* ast) {
-	mAsteroids.emplace_back(ast);
-}
+// 가장 가까운 적을 찾는 함수
+Enemy* Game::GetNearestEnemy(const Vector2d& pos) {
+	Enemy* best = nullptr;
 
-void Game::RemoveAsteroid(Asteroid* ast) {
-	auto iter = std::find(mAsteroids.begin(), mAsteroids.end(), ast);
-
-	if (iter != mAsteroids.end()) {
-		mAsteroids.erase(iter);
+	// 적이 게임에 있는 경우
+	if (mEnemies.size() > 0) {
+		best = mEnemies[0];
+		float bestDistSq = (pos - mEnemies[0]->GetPosition()).LengthSq();
+		for (size_t i = 1; i < mEnemies.size(); i++) {
+			float newDistSq = (pos - mEnemies[i]->GetPosition()).LengthSq();
+			if (newDistSq < bestDistSq) {
+				bestDistSq = newDistSq;
+				best = mEnemies[i];
+			}
+		}
 	}
+
+	return best;
 }

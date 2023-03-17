@@ -1,4 +1,4 @@
-#include "PreCompiled.hpp"
+#include "../PreCompiled.hpp"
 
 InputComponent::InputComponent(Actor* owner)
 	: MoveComponent(owner), mForwardKey(0), mBackKey(0), 
@@ -20,7 +20,7 @@ void InputComponent::ProcessInput(const uint8_t* keyState) {
 		SetIsMoving(true);
 	}
 	// 속도를 상속한 함수인 SetForwardSpeed로 넘긴다
-	SetFoarwardSpeed(forwardSpeed);
+	SetForwardSpeed(forwardSpeed);
 
 	// 각 속도 계싼
 	float angularSpeed = 0.f;

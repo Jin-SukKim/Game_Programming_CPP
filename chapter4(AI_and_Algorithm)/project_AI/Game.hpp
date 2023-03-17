@@ -35,11 +35,10 @@ private:
 	// 게임에 그려야할 스프라이트
 	std::vector<class SpriteComponent*> mSprites;
 
-	// Ship 스프라이트
-	class Ship* mShip;
-
-	// 운석 스프라이트
-	std::vector<class Asteroid*> mAsteroids;
+	// 게임
+	std::vector<class Enemy*> mEnemies;
+	class Grid* mGrid;
+	float mNextEnemy;
 public:
 	// constructor
 	Game();
@@ -63,9 +62,12 @@ public:
 	// 스프라이트 삭제
 	void RemoveSprite(class SpriteComponent* sprite);
 
-	void AddAsteroid(class Asteroid* ast);
-	void RemoveAsteroid(class Asteroid* ast);
-	std::vector<class Asteroid*>& GetAsteroid() {
-		return mAsteroids;
+	class Grid* GetGrid() {
+		return mGrid;
 	}
+	std::vector<class Enemy*>& GetEnemies() {
+		return mEnemies;
+	}
+	// 가장 가까운 적을 찾는 함수
+	class Enemy* GetNearestEnemy(const Vector2d& pos);
 };

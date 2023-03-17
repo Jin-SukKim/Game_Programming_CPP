@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <random>
 #include <queue>
+#include <iostream>
 
 #include "GameMath\MathUtils.hpp"
 #include "GameMath\Vector2d.hpp"
@@ -27,15 +28,21 @@
 #include "Component\SpriteComponent.hpp"
 #include "Component\AnimSpriteComponent.hpp"
 #include "Component\BGSpriteComponent.hpp"
-#include "Component\CircleCompoenent.hpp"
+#include "Component\CircleComponent.hpp"
 #include "NavComponent.hpp"
 
 #include "AIComponent.hpp"
 #include "AIState.hpp"
 
-#include "GameObject\Laser.hpp"
-#include "GameObject\Ship.hpp"
-#include "GameObject\Asteroid.hpp"
+#include "Bullet.hpp"
+#include "Enemy.hpp"
+#include "Tower.hpp"
+
+
+#include "Tile.hpp"
+#include "Grid.hpp"
+
+
 
 
 #include "Game.hpp"

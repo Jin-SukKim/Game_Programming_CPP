@@ -6,7 +6,7 @@
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
 
-#include "PreCompiled.hpp"
+#include "../PreCompiled.hpp"
 
 void Random::Init()
 {

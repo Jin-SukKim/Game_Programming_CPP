@@ -1,4 +1,4 @@
-#include "PreCompiled.hpp"
+#include "../PreCompiled.hpp"
 
 MoveComponent::MoveComponent(class Actor* owner, int updateOrder) 
 	: Component(owner, updateOrder), mAngularSpeed(0), mForwardSpeed(0) {}

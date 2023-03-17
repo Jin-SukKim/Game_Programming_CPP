@@ -4,7 +4,7 @@ public:
 	CircleComponent(class Actor* owner);
 
 	// 원의 반지름 설정
-	void SetRarius(float radius) {
+	void SetRadius(float radius) {
 		mRadius = radius;
 	}
 	float GetRadius() const;

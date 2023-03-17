@@ -1,4 +1,4 @@
-#include "PreCompiled.hpp"
+#include "..\PreCompiled.hpp"
 
 const Vector3d Vector3d::Zero(0.f, 0.f, 0.f);
 const Vector3d Vector3d::UnitX(1.f, 0.f, 0.f);

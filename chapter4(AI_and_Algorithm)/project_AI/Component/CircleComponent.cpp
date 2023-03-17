@@ -1,4 +1,4 @@
-#include "PreCompiled.hpp"
+#include "../PreCompiled.hpp"
 
 CircleComponent::CircleComponent(Actor* owner)
 	: Component(owner), mRadius(0.f) {}
