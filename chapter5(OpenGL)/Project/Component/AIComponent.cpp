@@ -1,4 +1,4 @@
-#include "PreCompiled.hpp"
+#include "..\PreCompiled.hpp"
 
 AIComponent::AIComponent(Actor* owner) : Component(owner), mCurrentState(nullptr) {}
 

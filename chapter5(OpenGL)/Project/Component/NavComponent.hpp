@@ -16,9 +16,6 @@ public:
 	// 경로상의 다음 지점을 반환
 	Vector2d GetNextPoint();
 
-	// 시작 지점
-	void StartPath(const class Tile* start);
 private:
 	Vector2d mNextPoint;
-	const class Tile* mNextNode;
 };

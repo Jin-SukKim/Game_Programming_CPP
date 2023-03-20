@@ -3,7 +3,7 @@
 AnimSpriteComponent::AnimSpriteComponent(class Actor* owner, int drawOrder)
 	: SpriteComponent(owner), mCurrFrame(0.f), mAnimFPS(24.f) {}
 
-void AnimSpriteComponent::SetAnimTextures(const std::vector<SDL_Texture*>& textures) {
+void AnimSpriteComponent::SetAnimTextures(const std::vector<Texture*>& textures) {
 	mAnimTextures = textures;
 
 	if (mAnimTextures.size() > 0) {

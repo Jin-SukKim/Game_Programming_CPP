@@ -2,7 +2,7 @@
 
 Ship::Ship(class Game* game) : Actor(game), mLaserCoolDown(0.f) {
 	// 우주선 텍스처를 가진 애니메이션 스프라이트 생성
-	sc = new SpriteComponent(this);
+	sc = new SpriteComponent(this, 150);
 	sc->SetTexture(game->GetTexture("Assets/Ship.png"));
 
 	in = new InputComponent(this);

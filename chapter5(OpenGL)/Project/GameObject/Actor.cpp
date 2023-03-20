@@ -2,7 +2,7 @@
 
 // 의존성 주입(dependency injection) 접근법 사용
 Actor::Actor(Game* game) : mState(EActive), mPosition(Vector2d::Zero),
-mScale(1.f), mRotation(0.f), mGame(game) {
+mScale(1.f), mRotation(0.f), mGame(game), mRecomputeWorldTransform(true) {
 	mGame->AddActor(this);
 }
 
@@ -20,8 +20,13 @@ Actor::~Actor() {
 void Actor::Update(float deltaTime) {
 	// Actor가 EActive상태일때만 Actor를 갱신해준다.
 	if (mState == EActive) {
+		ComputeWorldTransform();
+
 		UpdateComponents(deltaTime);
 		UpdateActor(deltaTime);
+
+		// Component 업데이트 후 Actor의 위치등이 바꼇다고 가정
+		ComputeWorldTransform();
 	}
 }
 
@@ -56,8 +61,8 @@ void Actor::RemoveComponent(Component* component) {
 }
 
 // 각도에 따른 전방 벡터 구하기
-Vector2d Actor::GetForward() {
-	return Vector2d(MathUtils::Cos(mRotation), -MathUtils::Sin(mRotation));
+Vector2d Actor::GetForward() const {
+	return Vector2d(MathUtils::Cos(mRotation), MathUtils::Sin(mRotation));
 }
 
 void Actor::ProcessInput(const uint8_t* keyState) {
@@ -72,3 +77,20 @@ void Actor::ProcessInput(const uint8_t* keyState) {
 	}
 }
 
+// World Space로 transform 적용
+void Actor::ComputeWorldTransform() {
+	if (mRecomputeWorldTransform) {
+		mRecomputeWorldTransform = false;
+		// 크기 * 회전 * 이동
+		mWorldTransform = Matrix4x4::CreateScale(mScale);
+		mWorldTransform *= Matrix4x4::CreateRotationZ(mRotation);
+		mWorldTransform *= Matrix4x4::CreateTranslation(
+			Vector3d(mPosition.x, mPosition.y, 0.0f));
+
+		// Component한테 world transform 갱신을 알린다
+		for (auto comp : mComponents)
+		{
+			comp->OnUpdateWorldTransform();
+		}
+	}
+}

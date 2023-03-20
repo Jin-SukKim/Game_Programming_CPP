@@ -1,12 +1,12 @@
-#include "..\PreCompiled.hpp"
+Ôªø#include "..\PreCompiled.hpp"
 
-const Vector3d Vector3d::Zero(0.f, 0.f, 0.f);
-const Vector3d Vector3d::UnitX(1.f, 0.f, 0.f);
-const Vector3d Vector3d::UnitY(0.f, 1.f, 0.f);
-const Vector3d Vector3d::UnitZ(0.f, 0.f, 1.f);
-const Vector3d Vector3d::NegUnitX(-1.f, 0.f, 0.f);
-const Vector3d Vector3d::NegUnitY(0.f, -1.f, 0.f);
-const Vector3d Vector3d::NegUnitZ(0.f, 0.f, -1.f);
+const Vector3d Vector3d::Zero(0.0f, 0.0f, 0.f);
+const Vector3d Vector3d::UnitX(1.0f, 0.0f, 0.0f);
+const Vector3d Vector3d::UnitY(0.0f, 1.0f, 0.0f);
+const Vector3d Vector3d::UnitZ(0.0f, 0.0f, 1.0f);
+const Vector3d Vector3d::NegUnitX(-1.0f, 0.0f, 0.0f);
+const Vector3d Vector3d::NegUnitY(0.0f, -1.0f, 0.0f);
+const Vector3d Vector3d::NegUnitZ(0.0f, 0.0f, -1.0f);
 const Vector3d Vector3d::Infinity(MathUtils::Infinity, MathUtils::Infinity, MathUtils::Infinity);
 const Vector3d Vector3d::NegInfinity(MathUtils::NegInfinity, MathUtils::NegInfinity, MathUtils::NegInfinity);
 
@@ -14,7 +14,7 @@ Vector3d::Vector3d() : x(0.f), y(0.f), z(0.f) {}
 Vector3d::Vector3d(float inX, float inY, float inZ) : x(inX), y(inY), z(inZ) {}
 
 const float* Vector3d::GetAsFloatPtr() const {
-	// ∆˜¿Œ≈Õ∑Œ ∞≠¡¶ «¸∫Ø»Ø
+	// Ìè¨Ïù∏ÌÑ∞Î°ú Í∞ïÏ†ú ÌòïÎ≥ÄÌôò
 	return reinterpret_cast<const float*>(&x);
 }
 
@@ -24,39 +24,39 @@ void Vector3d::Set(float inX, float inY, float inZ) {
 	z = inZ;
 }
 
-// µ°º¿
+// ÎçßÏÖà
 Vector3d Vector3d::operator+(const Vector3d& v) const {
 	return Vector3d(x + v.x, y + v.y, z + v.z);
 }
 
 Vector3d& Vector3d::operator+=(const Vector3d& v) {
-	*this = *this + v;
-	return *this;
+	(*this) = (*this) + v;
+	return (*this);
 }
 
-// ª¨º¿
+// Î∫ÑÏÖà
 Vector3d Vector3d::operator-(const Vector3d& v) const {
 	return Vector3d(x - v.x, y - v.y, z - v.z);
 }
 Vector3d& Vector3d::operator-=(const Vector3d& v) {
-	*this = *this - v;
-	return *this;
+	(*this) = (*this) - v;
+	return (*this);
 }
 
-// ∞ˆº¿
+// Í≥±ÏÖà
 Vector3d Vector3d::operator*(const Vector3d& v) const {
 	return Vector3d(x * v.x, y * v.y, z * v.z);
 }
 Vector3d& Vector3d::operator*=(const Vector3d& v) {
-	*this = *this * v;
-	return *this;
+	(*this) = (*this) * v;
+	return (*this);
 }
 Vector3d Vector3d::operator*(float scalar) const {
 	return Vector3d(x * scalar, y * scalar, z * scalar);
 }
 Vector3d& Vector3d::operator*=(float scalar) {
-	*this = *this * scalar;
-	return *this;
+	(*this) = (*this) * scalar;
+	return (*this);
 }
 
 float Vector3d::LengthSq() const {
@@ -80,44 +80,50 @@ Vector3d Vector3d::Normalize(const Vector3d& vec) {
 	return temp;
 }
 
-float Vector3d::Dot(const Vector3d& v, const Vector3d& u) {
-	return (v.x * u.x + v.y * u.y + v.z * u.z);
+float Vector3d::Dot(const Vector3d& a, const Vector3d& b) {
+	return (a.x * b.x + a.y * b.y + a.z * b.z);
 }
 
-Vector3d Vector3d::Cross(const Vector3d& v, const Vector3d& u) {
+Vector3d Vector3d::Cross(const Vector3d& a, const Vector3d& b) {
 	Vector3d temp;
-	temp.x = v.y * u.z - v.z * u.y;
-	temp.y = v.z * u.x - v.x * u.z;
-	temp.z = v.x * u.y - v.y * u.x;
+	temp.x = a.y * b.z - a.z * b.y;
+	temp.y = a.z * b.x - a.x * b.z;
+	temp.z = a.x * b.y - a.y * b.x;
 	return temp;
 }
 
-Vector3d Vector3d::Lerp(const Vector3d& v, const Vector3d& u, float f) {
-	return Vector3d(v + (u - v) * f);
+Vector3d Vector3d::Lerp(const Vector3d& a, const Vector3d& b, float f) {
+	return Vector3d(a + (b - a) * f);
 }
 
-Vector3d Vector3d::Transform(const Vector3d& v, const Matrix4x4& m, float w) {
+Vector3d Vector3d::Transform(const Vector3d& vec, const Matrix4x4& mat, float w) {
 	Vector3d retVal;
-	retVal.x = v.x * m.mat[0][0] + v.y * m.mat[1][0] + v.z * m.mat[2][0] + w * m.mat[3][0];
-	retVal.x = v.x * m.mat[0][1] + v.y * m.mat[1][1] + v.z * m.mat[2][1] + w * m.mat[3][1];
-	retVal.x = v.x * m.mat[0][2] + v.y * m.mat[1][2] + v.z * m.mat[2][2] + w * m.mat[3][2];
-	// ¿Ãµø ∫§≈Õ¿« ∏∂¡ˆ∏∑¿∫ «◊ªÛ 0¿Ã µ«π«∑Œ w¥¬ æ»«ÿ¡‡µµ µ»¥Ÿ.
+	retVal.x = vec.x * mat.mat[0][0] + vec.y * mat.mat[1][0] +
+		vec.z * mat.mat[2][0] + w * mat.mat[3][0];
+	retVal.y = vec.x * mat.mat[0][1] + vec.y * mat.mat[1][1] +
+		vec.z * mat.mat[2][1] + w * mat.mat[3][1];
+	retVal.z = vec.x * mat.mat[0][2] + vec.y * mat.mat[1][2] +
+		vec.z * mat.mat[2][2] + w * mat.mat[3][2];
+	// Ïù¥Îèô Î≤°ÌÑ∞Ïùò ÎßàÏßÄÎßâÏùÄ Ìï≠ÏÉÅ 0Ïù¥ ÎêòÎØÄÎ°ú wÎäî ÏïàÌï¥Ï§òÎèÑ ÎêúÎã§.
 	return retVal;
 }
 
-// ¿Ãµø ∫§≈Õ ±◊∏Æ∞Ì w ∞™¿∏∑Œ ¡§±‘»≠
-Vector3d Vector3d::TransformWithPersDiv(const Vector3d& v, const Matrix4x4& m, float w) {
+// Ïù¥Îèô Î≤°ÌÑ∞ Í∑∏Î¶¨Í≥† w Í∞íÏúºÎ°ú Ï†ïÍ∑úÌôî
+Vector3d Vector3d::TransformWithPersDiv(const Vector3d& vec, const Matrix4x4& mat, float w) {
 	Vector3d retVal;
-	retVal.x = v.x * m.mat[0][0] + v.y * m.mat[1][0] + v.z * m.mat[2][0] + w * m.mat[3][0];
-	retVal.x = v.x * m.mat[0][1] + v.y * m.mat[1][1] + v.z * m.mat[2][1] + w * m.mat[3][1];
-	retVal.x = v.x * m.mat[0][2] + v.y * m.mat[1][2] + v.z * m.mat[2][2] + w * m.mat[3][2];
-	float transformedW = v.x * m.mat[0][3] + v.y * m.mat[1][3] + v.z * m.mat[2][3] + w * m.mat[3][3];
-
-	if (!MathUtils::NearZero(MathUtils::Abs(transformedW))) {
-		transformedW = 1.f / transformedW;
-			retVal *= transformedW;
+	retVal.x = vec.x * mat.mat[0][0] + vec.y * mat.mat[1][0] +
+		vec.z * mat.mat[2][0] + w * mat.mat[3][0];
+	retVal.y = vec.x * mat.mat[0][1] + vec.y * mat.mat[1][1] +
+		vec.z * mat.mat[2][1] + w * mat.mat[3][1];
+	retVal.z = vec.x * mat.mat[0][2] + vec.y * mat.mat[1][2] +
+		vec.z * mat.mat[2][2] + w * mat.mat[3][2];
+	float transformedW = vec.x * mat.mat[0][3] + vec.y * mat.mat[1][3] +
+		vec.z * mat.mat[2][3] + w * mat.mat[3][3];
+	if (!MathUtils::NearZero(MathUtils::Abs(transformedW)))
+	{
+		transformedW = 1.0f / transformedW;
+		retVal *= transformedW;
 	}
-
 	return retVal;
 
 }

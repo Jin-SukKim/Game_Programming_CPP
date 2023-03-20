@@ -15,6 +15,9 @@ public:
 
 	virtual void ProcessInput(const uint8_t* keyState) {};
 
+	// 소유자의 세계 변환이 갱신될 때 컴포넌트한테 통지한다.
+	virtual void OnUpdateWorldTransform() {};
+
 // 상속관계의 클래스끼리 공유한다.
 protected:
 	// 소유자 actor

@@ -1,9 +1,7 @@
 #include "PreCompiled.hpp"
 
-const int thickness = 15;
-const float paddleH = 100.f;
 // constructor
-Game::Game() : mWindow(nullptr),
+Game::Game() : mWindow(nullptr), mSpriteShader(nullptr),
 mIsRunning(true), mUpdatingActors(false) {};
 
 // 초기화를 성공하면 true 아니면 false return
@@ -23,12 +21,6 @@ bool Game::Initialize() {
 		// console에 에러 메시지 출력
 		// SDL_Log는 C printf 함수와 같은 문법 사용
 		SDL_Log("Unable to initialize SLD : %s", SDL_GetError());
-		return false;
-	}
-
-	sdlResult = IMG_Init(IMG_INIT_PNG); // 이미지 초기화
-	if (sdlResult == 0) {
-		SDL_Log("Unable to initialize IMG : %s", SDL_GetError());
 		return false;
 	}
 
@@ -71,7 +63,7 @@ bool Game::Initialize() {
 
 		플래그 종류 : 전체화면, 현재 모니터 해상도로 전체화면, opengl 라이브러리 지원추가, 크기 조절
 	*/
-	mWindow = SDL_CreateWindow("Game Programming in C++ (Chapter 5) - Tower Defense Game",	// 윈도우 제목
+	mWindow = SDL_CreateWindow("Game Programming in C++ (Chapter 5) - OpenGL",	// 윈도우 제목
 		100,	// 윈도우 좌측 상단 x좌표
 		100,	// 윈도우 좌측 상단 y좌표
 		1024,	// 윈도우 너비
@@ -98,7 +90,18 @@ bool Game::Initialize() {
 	// 그러므로 에러값을 제거
 	glGetError();
 	
+	// 셰이더
+	if (!LoadShaders())
+	{
+		SDL_Log("Failed to load shaders.");
+		return false;
+	}
+
+	// 정점 배열 개체 생성
+	InitSpriteVerts();
+
 	LoadData();
+
 	mTicksCount = SDL_GetTicks();
 	// SDL 초기화와 윈도우 생성
 	return true;
@@ -107,7 +110,9 @@ bool Game::Initialize() {
 // 게임 종료를 위해 SDL을 닫는다.
 void Game::ShutDown() {
 	UnLoadData();
-	IMG_Quit();
+	delete mSpriteVerts;
+	mSpriteShader->Unload();
+	delete mSpriteShader;
 	// SDL Context 해제
 	SDL_GL_DeleteContext(mContext);
 	// SDL_Window 객체를 해제한다.
@@ -142,17 +147,6 @@ void Game::ProcessInput() {
 	// 이스케이프 키를 눌렀다면 루프 종료
 	if (state[SDL_SCANCODE_ESCAPE]) {
 		mIsRunning = false;
-	}
-	
-	if (state[SDL_SCANCODE_B]) {
-		mGrid->BuildTower();
-	}
-
-	// 마우스 상태 얻기
-	int x, y;
-	Uint32 buttons = SDL_GetMouseState(&x, &y);
-	if (SDL_BUTTON(buttons) & SDL_BUTTON_LEFT) {
-		mGrid->ProcessClick(x, y);
 	}
 
 	// 모든 Actor를 반복하면서 각 Actor의 ProcessInput을 호출
@@ -192,7 +186,10 @@ void Game::UpdateGame() {
 	mUpdatingActors = false;
 
 	// 대기 중인 Actor를 mActors로 이동
-	for (auto pending : mPendingActors) {
+	for (auto pending : mPendingActors)
+	{
+		// 대기중인 Actor가 올바른 세계 변환 행렬을 가지도록 한다.
+		pending->ComputeWorldTransform();
 		mActors.emplace_back(pending);
 	}
 	// vector의 값들을 지우지만 메모리는 할당되어있다.
@@ -216,11 +213,24 @@ void Game::UpdateGame() {
 
 void Game::GenerateOutput() {
 	// OpenGL의 색상을 지정
-	glClearColor(0.86f, 0.86f, 0.86f, 1.f); // 회색
+	glClearColor(0.86f, 0.86f, 0.86f, 1.0f); // 회색
 	// 색상 버퍼 초기화
-	glClear(GL_COLOR_BUFFER_BIT); 
+	glClear(GL_COLOR_BUFFER_BIT);
 
 	// 장면을 그린다
+
+	glEnable(GL_BLEND);
+	// 색상 버퍼에 alpha blending을 허용해준다.
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	// 스프라이트 셰이더와 vertex 배열 개체를 활성화
+	mSpriteShader->SetActive();
+	mSpriteVerts->SetActive();
+
+	// 모든 스프라이트를 그린다.
+	for (auto sprite : mSprites) {
+		sprite->Draw(mSpriteShader);
+	}
 
 	// 버퍼를 스왑해서 장면을 출력
 	SDL_GL_SwapWindow(mWindow);
@@ -265,47 +275,43 @@ void Game::RemoveActor(Actor* actor) {
 	}
 }
 
-SDL_Texture* Game::LoadTexture(const char* fileName) {
-	// 파일로부터 이미지 로딩
-	// 성공하면 포인터를 return하고 실패하면 nullptr return
-	SDL_Surface* surf = IMG_Load(fileName);
-	if (!surf) {
-		SDL_Log("Failed to load texture file %s", fileName);
-		return nullptr;
-	}
 
-	// 텍스쳐 생성
-	// SDL_Surface를 SDL이 화면에 그리는데 필요한 포맷인 SDL_Texture로 변환
-	SDL_Texture* tex = SDL_CreateTextureFromSurface(mRenderer, surf); // 사용할 렌더러, 변환된 SDL_Surface
-	SDL_FreeSurface(surf); // SDL_Surface 초기화
-	if (!tex) {
-		SDL_Log("Failed to convert surface to texture for %s", fileName);
-		return nullptr;
-	}
-
-	return tex;
-}
-
-SDL_Texture* Game::GetTexture(const std::string& fileName) {
-	SDL_Texture* tex = nullptr;
+Texture* Game::GetTexture(const std::string& fileName) {
+	Texture* tex = nullptr;
 	// 불러올 Texture가 이미 맵에 존재하느지 확인
 	auto iter = mTextures.find(fileName);
 	if (iter != mTextures.end()) {
-		// 맵에 존재한다면 SDL_Texture에 바로 return
+		// 맵에 존재한다면 Texture에 바로 return
 		tex = iter->second;
 	}
 	// 맵에 없다면 텍스쳐를 로드한다.
 	else {
-		tex = LoadTexture(fileName.c_str());
-		// Load한 Texture를 맵에 넣어준다.
-		mTextures.emplace(fileName, tex);
+		tex = new Texture();
+		if (tex->Load(fileName)) {
+			// Load한 Texture를 맵에 넣어준다.
+			mTextures.emplace(fileName, tex);
+		}
+		else
+		{
+			delete tex;
+			tex = nullptr;
+		}
 	}
 	return tex;
 }
 
 // Game의 모든 Actor를 생성한다.
 void Game::LoadData() {
-	mGrid = new Grid(this);
+	// 플레이어
+	mShip = new Ship(this);
+	mShip->SetRotation(MathUtils::PIOver2);
+
+	// Asteroids 생성
+	const int numAsteroids = 20;
+	for (int i = 0; i < numAsteroids; i++) {
+		new Asteroid(this);
+	}
+
 }
 
 
@@ -318,7 +324,8 @@ void Game::UnLoadData() {
 
 	// Texture 삭제
 	for (auto i : mTextures) {
-		SDL_DestroyTexture(i.second);
+		i.second->Unload();
+		delete i.second;
 	}
 	mTextures.clear();
 
@@ -347,8 +354,52 @@ void Game::RemoveSprite(SpriteComponent* sprite) {
 
 
 void Game::InitSpriteVerts() {
+
+	float vertices[] = {
+		-0.5f,  0.5f, 0.f, // top left, vertex 0
+		 0.5f,  0.5f, 0.f, // top right, vertex 1
+		 0.5f, -0.5f, 0.f, // bottom right, vertex 2
+		-0.5f, -0.5f, 0.f,  // bottom left, vertex 3
+	};
+
+	unsigned int indices[] = {
+		0, 1, 2,
+		2, 3, 0
+	};
+
 	// 정점과 인덱스 버퍼 변수는 스프라이트 사각형의 배열이다.
 	// 정점 버퍼에 4개의 정점이, 인덱스 버퍼에 6개의 인덱스가 있다.
 	// (사각형에는 2개의 삼각형 존재)
-	mSpriteVerts = new VertexArray(vertexBuffer, 4, indexBuffer, 6);
+	mSpriteVerts = new VertexArray(vertices, 4, indices, 6);
+}
+
+// 셰이더 파일을 로드하고 셰이더를 활성화
+bool Game::LoadShaders() {
+	mSpriteShader = new Shader();
+	if (!mSpriteShader->Load("Shaders/Transform.vert", "Shaders/Basic.frag"))
+	{
+		return false;
+	}
+	mSpriteShader->SetActive();
+
+	// 1024x768로 가정한 뷰-투영 행렬을 생성
+	Matrix4x4 viewProj = Matrix4x4::CreateSimpleViewProj(1024.f, 768.f);
+	// Vertex shader에 전달
+	mSpriteShader->SetMatrixUniform("uViewProj", viewProj);
+
+	
+	return true;
+}
+
+// 게임
+void Game::AddAsteroid(Asteroid* ast) {
+	mAsteroids.emplace_back(ast);
+}
+
+void Game::RemoveAsteroid(Asteroid* ast) {
+	auto iter = std::find(mAsteroids.begin(), mAsteroids.end(), ast);
+	if (iter != mAsteroids.end())
+	{
+		mAsteroids.erase(iter);
+	}
 }

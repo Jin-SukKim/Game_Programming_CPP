@@ -18,13 +18,13 @@ VertexArray::VertexArray(const float* verts, unsigned int numVerts,
 	// 개체 ID를 전달하지 않고 대신 현재 바인딩될 버퍼의 타입을 지정한다.
 	glBufferData(
 		// 데이터를 쓸 버퍼의 버퍼 타입(막 생성한 버퍼를 사용한다는 의미)
-		GL_ARRAY_BUFFER,	
+		GL_ARRAY_BUFFER,
 		// 복사할 바이트 크기(x,y,z 3개의 float을 포함)
-		numVerts * 3 * sizeof(float),	
+		numVerts * 3 * sizeof(float),
 		// 복사할 소스(포인터)
 		verts,				
 		// 데이터를 어떻게 사용할지(데이터를 오직 한 번만 로드, 자주 그려지는 경우 사용되는 옵션)
-		GL_STATIC_DRAW		
+		GL_STATIC_DRAW
 	);
 
 	// 인덱스 버퍼 생성
@@ -63,7 +63,6 @@ VertexArray::VertexArray(const float* verts, unsigned int numVerts,
 		// (추가 속성에 대해서는 0이 아닌 값을 전달해야 한다)
 		0
 	);
-
 
 }
 

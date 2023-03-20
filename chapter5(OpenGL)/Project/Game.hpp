@@ -14,17 +14,20 @@ public:
 	void AddActor(class Actor* actor);
 	void RemoveActor(class Actor* actor);
 
-	// 이미지 로딩 과정 캡슐화
-	SDL_Texture* LoadTexture(const char* fileName);
 	// Texture 맵에서 Texture 가져오는 함수
-	SDL_Texture* GetTexture(const std::string& fileName);
+	class Texture* GetTexture(const std::string& fileName);
 
 	// mDrawOrder 순서로 스프라이트 정렬해 저장
 	void AddSprite(class SpriteComponent* sprite);
 	// 스프라이트 삭제
 	void RemoveSprite(class SpriteComponent* sprite);
 
-
+	// 게임
+	void AddAsteroid(class Asteroid* ast);
+	void RemoveAsteroid(class Asteroid* ast);
+	std::vector<class Asteroid*>& GetAsteroids() {
+		return mAsteroids;
+	}
 
 private:
 	// 게임 루프를 위한 헬퍼 함수
@@ -53,7 +56,7 @@ private:
 	void UnLoadData();
 
 	// 텍스쳐 관리용 맵
-	std::unordered_map<std::string, SDL_Texture*> mTextures;
+	std::unordered_map<std::string, class Texture*> mTextures;
 
 	// 게임에 그려야할 스프라이트
 	std::vector<class SpriteComponent*> mSprites;
@@ -61,7 +64,16 @@ private:
 	// OpenGL 콘텍스트
 	SDL_GLContext mContext;
 
+	// 삼각형의 정점 배열
 	class VertexArray* mSpriteVerts;
 	void InitSpriteVerts();
+
+	// 셰이더, 스프라이트를 그리는데 사용된다.
+	class Shader* mSpriteShader;
+	bool LoadShaders();
+
+	// 게임 오브젝트
+	class Ship* mShip;
+	std::vector<class Asteroid*> mAsteroids;
 
 };

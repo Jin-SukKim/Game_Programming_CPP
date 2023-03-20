@@ -15,121 +15,121 @@ Matrix4x4::Matrix4x4() {
 }
 
 Matrix4x4::Matrix4x4(float inMat[4][4]) {
-	std::copy(&mat[0][0], &mat[0][0] + 4 * 4, &inMat[0][0]);
+	memcpy(mat, inMat, 16 * sizeof(float));
 }
 
 const float* Matrix4x4::GetAsFloatPtr() const {
 	return reinterpret_cast<const float*>(&mat[0][0]);
 }
 
-Matrix4x4 Matrix4x4::operator*(const Matrix4x4& m) {
+Matrix4x4 Matrix4x4::operator*(const Matrix4x4& b) {
 	Matrix4x4 retVal;
 	// row 0
 	retVal.mat[0][0] =
-		mat[0][0] * m.mat[0][0] +
-		mat[0][1] * m.mat[1][0] +
-		mat[0][2] * m.mat[2][0] +
-		mat[0][3] * m.mat[3][0];
+		mat[0][0] * b.mat[0][0] +
+		mat[0][1] * b.mat[1][0] +
+		mat[0][2] * b.mat[2][0] +
+		mat[0][3] * b.mat[3][0];
 
 	retVal.mat[0][1] =
-		mat[0][0] * m.mat[0][1] +
-		mat[0][1] * m.mat[1][1] +
-		mat[0][2] * m.mat[2][1] +
-		mat[0][3] * m.mat[3][1];
+		mat[0][0] * b.mat[0][1] +
+		mat[0][1] * b.mat[1][1] +
+		mat[0][2] * b.mat[2][1] +
+		mat[0][3] * b.mat[3][1];
 
 	retVal.mat[0][2] =
-		mat[0][0] * m.mat[0][2] +
-		mat[0][1] * m.mat[1][2] +
-		mat[0][2] * m.mat[2][2] +
-		mat[0][3] * m.mat[3][2];
+		mat[0][0] * b.mat[0][2] +
+		mat[0][1] * b.mat[1][2] +
+		mat[0][2] * b.mat[2][2] +
+		mat[0][3] * b.mat[3][2];
 
 	retVal.mat[0][3] =
-		mat[0][0] * m.mat[0][3] +
-		mat[0][1] * m.mat[1][3] +
-		mat[0][2] * m.mat[2][3] +
-		mat[0][3] * m.mat[3][3];
+		mat[0][0] * b.mat[0][3] +
+		mat[0][1] * b.mat[1][3] +
+		mat[0][2] * b.mat[2][3] +
+		mat[0][3] * b.mat[3][3];
 
 	// row 1
 	retVal.mat[1][0] =
-		mat[1][0] * m.mat[0][0] +
-		mat[1][1] * m.mat[1][0] +
-		mat[1][2] * m.mat[2][0] +
-		mat[1][3] * m.mat[3][0];
+		mat[1][0] * b.mat[0][0] +
+		mat[1][1] * b.mat[1][0] +
+		mat[1][2] * b.mat[2][0] +
+		mat[1][3] * b.mat[3][0];
 
 	retVal.mat[1][1] =
-		mat[1][0] * m.mat[0][1] +
-		mat[1][1] * m.mat[1][1] +
-		mat[1][2] * m.mat[2][1] +
-		mat[1][3] * m.mat[3][1];
+		mat[1][0] * b.mat[0][1] +
+		mat[1][1] * b.mat[1][1] +
+		mat[1][2] * b.mat[2][1] +
+		mat[1][3] * b.mat[3][1];
 
 	retVal.mat[1][2] =
-		mat[1][0] * m.mat[0][2] +
-		mat[1][1] * m.mat[1][2] +
-		mat[1][2] * m.mat[2][2] +
-		mat[1][3] * m.mat[3][2];
+		mat[1][0] * b.mat[0][2] +
+		mat[1][1] * b.mat[1][2] +
+		mat[1][2] * b.mat[2][2] +
+		mat[1][3] * b.mat[3][2];
 
 	retVal.mat[1][3] =
-		mat[1][0] * m.mat[0][3] +
-		mat[1][1] * m.mat[1][3] +
-		mat[1][2] * m.mat[2][3] +
-		mat[1][3] * m.mat[3][3];
+		mat[1][0] * b.mat[0][3] +
+		mat[1][1] * b.mat[1][3] +
+		mat[1][2] * b.mat[2][3] +
+		mat[1][3] * b.mat[3][3];
 
 	// row 2
 	retVal.mat[2][0] =
-		mat[2][0] * m.mat[0][0] +
-		mat[2][1] * m.mat[1][0] +
-		mat[2][2] * m.mat[2][0] +
-		mat[2][3] * m.mat[3][0];
+		mat[2][0] * b.mat[0][0] +
+		mat[2][1] * b.mat[1][0] +
+		mat[2][2] * b.mat[2][0] +
+		mat[2][3] * b.mat[3][0];
 
 	retVal.mat[2][1] =
-		mat[2][0] * m.mat[0][1] +
-		mat[2][1] * m.mat[1][1] +
-		mat[2][2] * m.mat[2][1] +
-		mat[2][3] * m.mat[3][1];
+		mat[2][0] * b.mat[0][1] +
+		mat[2][1] * b.mat[1][1] +
+		mat[2][2] * b.mat[2][1] +
+		mat[2][3] * b.mat[3][1];
 
 	retVal.mat[2][2] =
-		mat[2][0] * m.mat[0][2] +
-		mat[2][1] * m.mat[1][2] +
-		mat[2][2] * m.mat[2][2] +
-		mat[2][3] * m.mat[3][2];
+		mat[2][0] * b.mat[0][2] +
+		mat[2][1] * b.mat[1][2] +
+		mat[2][2] * b.mat[2][2] +
+		mat[2][3] * b.mat[3][2];
 
 	retVal.mat[2][3] =
-		mat[2][0] * m.mat[0][3] +
-		mat[2][1] * m.mat[1][3] +
-		mat[2][2] * m.mat[2][3] +
-		mat[2][3] * m.mat[3][3];
+		mat[2][0] * b.mat[0][3] +
+		mat[2][1] * b.mat[1][3] +
+		mat[2][2] * b.mat[2][3] +
+		mat[2][3] * b.mat[3][3];
 
 	// row 3
 	retVal.mat[3][0] =
-		mat[3][0] * m.mat[0][0] +
-		mat[3][1] * m.mat[1][0] +
-		mat[3][2] * m.mat[2][0] +
-		mat[3][3] * m.mat[3][0];
+		mat[3][0] * b.mat[0][0] +
+		mat[3][1] * b.mat[1][0] +
+		mat[3][2] * b.mat[2][0] +
+		mat[3][3] * b.mat[3][0];
 
 	retVal.mat[3][1] =
-		mat[3][0] * m.mat[0][1] +
-		mat[3][1] * m.mat[1][1] +
-		mat[3][2] * m.mat[2][1] +
-		mat[3][3] * m.mat[3][1];
+		mat[3][0] * b.mat[0][1] +
+		mat[3][1] * b.mat[1][1] +
+		mat[3][2] * b.mat[2][1] +
+		mat[3][3] * b.mat[3][1];
 
 	retVal.mat[3][2] =
-		mat[3][0] * m.mat[0][2] +
-		mat[3][1] * m.mat[1][2] +
-		mat[3][2] * m.mat[2][2] +
-		mat[3][3] * m.mat[3][2];
+		mat[3][0] * b.mat[0][2] +
+		mat[3][1] * b.mat[1][2] +
+		mat[3][2] * b.mat[2][2] +
+		mat[3][3] * b.mat[3][2];
 
 	retVal.mat[3][3] =
-		mat[3][0] * m.mat[0][3] +
-		mat[3][1] * m.mat[1][3] +
-		mat[3][2] * m.mat[2][3] +
-		mat[3][3] * m.mat[3][3];
+		mat[3][0] * b.mat[0][3] +
+		mat[3][1] * b.mat[1][3] +
+		mat[3][2] * b.mat[2][3] +
+		mat[3][3] * b.mat[3][3];
 
 	return retVal;
 }
 
 Matrix4x4& Matrix4x4::operator*=(const Matrix4x4& m) {
-	*this = *this * m;
-	return *this;
+	(*this) = (*this) * m;
+	return (*this);
 }
 
 void Matrix4x4::Invert() {
@@ -297,7 +297,7 @@ Matrix4x4 Matrix4x4::CreateRotationX(float theta) {
 		{ 1.0f, 0.0f, 0.0f , 0.0f },
 		{ 0.0f, MathUtils::Cos(theta), MathUtils::Sin(theta), 0.0f },
 		{ 0.0f, -MathUtils::Sin(theta), MathUtils::Cos(theta), 0.0f },
-		{ 0.0f, 0.0f, 0.0f, 1.0f },
+		{ 0.0f, 0.0f, 0.0f, 1.0f }
 	};
 	return Matrix4x4(temp);
 }
@@ -308,7 +308,7 @@ Matrix4x4 Matrix4x4::CreateRotationY(float theta) {
 		{ MathUtils::Cos(theta), 0.0f, -MathUtils::Sin(theta), 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ MathUtils::Sin(theta), 0.0f, MathUtils::Cos(theta), 0.0f },
-		{ 0.0f, 0.0f, 0.0f, 1.0f },
+		{ 0.0f, 0.0f, 0.0f, 1.0f }
 	};
 	return Matrix4x4(temp);
 }
@@ -319,7 +319,7 @@ Matrix4x4 Matrix4x4::CreateRotationZ(float theta) {
 		{ MathUtils::Cos(theta), MathUtils::Sin(theta), 0.0f, 0.0f },
 		{ -MathUtils::Sin(theta), MathUtils::Cos(theta), 0.0f, 0.0f },
 		{ 0.0f, 0.0f, 1.0f, 0.0f },
-		{ 0.0f, 0.0f, 0.0f, 1.0f },
+		{ 0.0f, 0.0f, 0.0f, 1.0f }
 	};
 	return Matrix4x4(temp);
 }

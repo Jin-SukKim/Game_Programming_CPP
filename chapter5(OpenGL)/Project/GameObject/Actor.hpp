@@ -13,10 +13,21 @@ public:
 	virtual ~Actor();
 
 	// Setters
-	void SetPosition(const Vector2d& pos) { mPosition = pos; }
+	// Actor의 크기, 회전, 이동에 관한 setting이 있으면
+	// world space에도 변화가 있으므로 worldtransform을 true로 설정
+	void SetPosition(const Vector2d& pos) { 
+		mPosition = pos; 
+		mRecomputeWorldTransform = true;
+	}
 	void SetState(State state) { mState = state; }
-	void SetScale(float scale) { mScale = scale; }
-	void SetRotation(float rotation) { mRotation = rotation; }
+	void SetScale(float scale) { 
+		mScale = scale; 
+		mRecomputeWorldTransform = true;
+	}
+	void SetRotation(float rotation) { 
+		mRotation = rotation; 
+		mRecomputeWorldTransform = true;
+	}
 
 	// Getters
 	State GetState() const { return mState; }
@@ -39,23 +50,32 @@ public:
 	void RemoveComponent(class Component* component);
 
 	// 전방 벡터
-	Vector2d GetForward();
+	Vector2d GetForward() const;
 
 	// Game이 호출하는 ProcessInput함수
 	void ProcessInput(const uint8_t* keyState);
 	// 특정 Actor를 위한 입력 코드
 	virtual void ActorInput(const uint8_t* keyState) {};
 
+	// 세계 변환 행렬(model space -> world space)
+	void ComputeWorldTransform();
+	const Matrix4x4& GetWorldTransform() const {
+		return mWorldTransform;
+	}
+
 private:
 	// Actor의 상태
 	State mState;
-	// 변환
-	Vector2d mPosition;	// Actor의 중심점
-	float mScale;		// Actor의 배율(100%의 경우 1.f)
-	float mRotation;	// 회전 각도 (Radian)
 
 	// Actor가 보유한 컴포넌트들
 	std::vector<class Component*> mComponents;
 	class Game* mGame;
+
+	// transform
+	Matrix4x4 mWorldTransform;
+	Vector2d mPosition;	// Actor의 중심점
+	float mScale;		// Actor의 배율(100%의 경우 1.f)
+	float mRotation;	// 회전 각도 (Radian)
+	bool mRecomputeWorldTransform;
 
 };

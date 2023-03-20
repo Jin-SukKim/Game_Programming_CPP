@@ -1,7 +1,7 @@
-#include "PreCompiled.hpp"
+#include "..\PreCompiled.hpp"
 
 NavComponent::NavComponent(Actor* owner, int updateOrder)
-	: MoveComponent(owner), mNextNode(nullptr) {}
+	: MoveComponent(owner) {}
 
 /*
 void NavComponent::Update(float deltaTime) {
@@ -18,16 +18,6 @@ void NavComponent::Update(float deltaTime) {
 */
 void NavComponent::Update(float deltaTime)
 {
-	if (mNextNode)
-	{
-		// If we're at the next node, advance along path
-		Vector2d diff = mOwner->GetPosition() - mNextNode->GetPosition();
-		if (MathUtils::NearZero(diff.Length(), 2.0f))
-		{
-			mNextNode = mNextNode->GetParent();
-			TurnTo(mNextNode->GetPosition());
-		}
-	}
 
 	MoveComponent::Update(deltaTime);
 }
@@ -40,9 +30,4 @@ void NavComponent::TurnTo(const Vector2d& pos) {
 	// y값을 반전시킨다. +y는 화면 아래방향이기 때문이다.
 	float angle = MathUtils::Atan2(-dir.y, dir.x);
 	mOwner->SetRotation(angle);
-}
-
-void NavComponent::StartPath(const Tile* start) {
-	mNextNode = start->GetParent();
-	TurnTo(mNextNode->GetPosition());
 }

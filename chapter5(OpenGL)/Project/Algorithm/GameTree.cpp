@@ -1,4 +1,5 @@
-#include "PreCompiled.hpp"
+#include "..\PreCompiled.hpp"
+
 struct GameState {
 	// 틱택토 게임 각 칸의 상태
 	enum SquareState { Empty, X, O };

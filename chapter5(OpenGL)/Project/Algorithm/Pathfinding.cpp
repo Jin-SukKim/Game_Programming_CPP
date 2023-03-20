@@ -1,4 +1,4 @@
-#include "PreCompiled.hpp"
+#include "..\PreCompiled.hpp"
 
 struct GraphNode {
 	// 각 노드는 인접 노드의 포인터들을 가지고 있따.
