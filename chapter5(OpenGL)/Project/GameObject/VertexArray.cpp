@@ -19,8 +19,8 @@ VertexArray::VertexArray(const float* verts, unsigned int numVerts,
 	glBufferData(
 		// 데이터를 쓸 버퍼의 버퍼 타입(막 생성한 버퍼를 사용한다는 의미)
 		GL_ARRAY_BUFFER,
-		// 복사할 바이트 크기(x,y,z 3개의 float을 포함)
-		numVerts * 3 * sizeof(float),
+		// 복사할 바이트 크기(x,y,z 3개의 float을 포함) + UV 좌표
+		numVerts * 5 * sizeof(float),
 		// 복사할 소스(포인터)
 		verts,				
 		// 데이터를 어떻게 사용할지(데이터를 오직 한 번만 로드, 자주 그려지는 경우 사용되는 옵션)
@@ -49,7 +49,7 @@ VertexArray::VertexArray(const float* verts, unsigned int numVerts,
 	glVertexAttribPointer(
 		// 속성 인덱스(첫 번째 정점 속성 인덱스는 0)
 		0,
-		// 요소의 수(이번 예시는 3, x,y,z)
+		// 요소의 수(이번 예시는 3, x,y,z) 현재 위치 좌표만 지정
 		3,
 		// 요소의 타입
 		GL_FLOAT,
@@ -57,12 +57,26 @@ VertexArray::VertexArray(const float* verts, unsigned int numVerts,
 		GL_FALSE,
 		// 간격 (일반적으로 각 정점의 크기), 연속한 정점 사이의 byte 오프셋
 		// 정점 버퍼에서 패딩(padding)이 없다면 정점의 크기가 간격이된다.
-		sizeof(float) * 3,
+		sizeof(float) * 5,
 		// 정점의 시작에서 이 속성까지의 오프셋
 		// 위치 속성은 정점의 시작 위치와 동일하기에 0이다.
 		// (추가 속성에 대해서는 0이 아닌 값을 전달해야 한다)
 		0
+	); // 이건 위치 정점 속성만 수정한다.
+
+	// 두번째 정점 속성인 텍스처 좌표 (속성 1 활성화)
+	glEnableVertexAttribArray(1);
+	// 텍스처 좌표 포맷 지정
+	glVertexAttribPointer(
+		1,	// 버텍스 속성 인덱스
+		2,	// 컴포넌트의 수 (UV, 2)
+		GL_FLOAT,	// 컴포넌트 타입
+		GL_FALSE,	// float 타입이므로 false
+		sizeof(float) * 5,	// 간격 (항상 버텍스의 크기, 위치좌표 + 텍스처좌표)
+		// (void*) 타입
+		reinterpret_cast<void*>(sizeof(float) * 3)	// 오프셋 포인터(앞에 위치좌표가 있으므로)
 	);
+	
 
 }
 

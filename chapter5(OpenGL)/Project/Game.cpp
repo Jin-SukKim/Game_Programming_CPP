@@ -219,9 +219,12 @@ void Game::GenerateOutput() {
 
 	// 장면을 그린다
 
-	glEnable(GL_BLEND);
 	// 색상 버퍼에 alpha blending을 허용해준다.
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	glBlendFunc(
+		GL_SRC_ALPHA,	// srcFactor = srcAlpha
+		GL_ONE_MINUS_SRC_ALPHA	// dstFactor = 1 - srcAlpha
+	);
 
 	// 스프라이트 셰이더와 vertex 배열 개체를 활성화
 	mSpriteShader->SetActive();
@@ -355,11 +358,12 @@ void Game::RemoveSprite(SpriteComponent* sprite) {
 
 void Game::InitSpriteVerts() {
 
+	// x, y, z 좌표, UV 좌표
 	float vertices[] = {
-		-0.5f,  0.5f, 0.f, // top left, vertex 0
-		 0.5f,  0.5f, 0.f, // top right, vertex 1
-		 0.5f, -0.5f, 0.f, // bottom right, vertex 2
-		-0.5f, -0.5f, 0.f,  // bottom left, vertex 3
+		-0.5f,  0.5f, 0.f, 0.f, 0.f, // top left, vertex 0
+		 0.5f,  0.5f, 0.f, 1.f, 0.f,// top right, vertex 1
+		 0.5f, -0.5f, 0.f, 1.f, 1.f,// bottom right, vertex 2
+		-0.5f, -0.5f, 0.f, 0.f, 1.f // bottom left, vertex 3
 	};
 
 	unsigned int indices[] = {
@@ -376,7 +380,7 @@ void Game::InitSpriteVerts() {
 // 셰이더 파일을 로드하고 셰이더를 활성화
 bool Game::LoadShaders() {
 	mSpriteShader = new Shader();
-	if (!mSpriteShader->Load("Shaders/Transform.vert", "Shaders/Basic.frag"))
+	if (!mSpriteShader->Load("Shaders/Sprite.vert", "Shaders/Sprite.frag"))
 	{
 		return false;
 	}
