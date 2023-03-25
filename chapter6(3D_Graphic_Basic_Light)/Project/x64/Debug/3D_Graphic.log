@@ -1,0 +1,40 @@
+﻿  3D_Graphic.cpp
+  GameTree.cpp
+  Pathfinding.cpp
+  CameraActor.cpp
+  AIComponent.cpp
+  AIState.cpp
+  AnimSpriteComponent.cpp
+  CircleComponent.cpp
+  Component.cpp
+  InputComponent.cpp
+  MoveComponent.cpp
+  NavComponent.cpp
+  SpriteComponent.cpp
+  Game.cpp
+  MathUtils.cpp
+  Matrix3x3.cpp
+  Matrix4x4.cpp
+  Random.cpp
+  Vector2d.cpp
+  Vector3d.cpp
+  Generating Code...
+  Compiling...
+  Actor.cpp
+  Shader.cpp
+  Texture.cpp
+  VertexArray.cpp
+  Mesh.cpp
+C:\Study\game_cpp\chapter6\3D_Graphic\3D_Graphic\Mesh.cpp(88,75): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Study\game_cpp\chapter6\3D_Graphic\3D_Graphic\Mesh.cpp(88,54): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Study\game_cpp\chapter6\3D_Graphic\3D_Graphic\Mesh.cpp(88,33): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Study\game_cpp\chapter6\3D_Graphic\3D_Graphic\Mesh.cpp(125,57): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+  MeshComponent.cpp
+  PlaneActor.cpp
+  PreCompiled.cpp
+  Quarternion.cpp
+  Renderer.cpp
+  Generating Code...
+  3D_Graphic.vcxproj -> C:\Study\game_cpp\chapter6\3D_Graphic\x64\Debug\3D_Graphic.exe
+  0개 파일이 복사되었습니다.
+  0개 파일이 복사되었습니다.
