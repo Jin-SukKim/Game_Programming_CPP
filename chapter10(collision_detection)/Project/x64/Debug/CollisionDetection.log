@@ -1,0 +1,66 @@
+﻿  Actor.cpp
+  CameraActor.cpp
+  FPSActor.cpp
+  FollowActor.cpp
+  OrbitActor.cpp
+  SplineActor.cpp
+  Mesh.cpp
+C:\Study\game_cpp\chapter10\CollisionDetection\CollisionDetection\Actor\Render\Mesh.cpp(89,75): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Study\game_cpp\chapter10\CollisionDetection\CollisionDetection\Actor\Render\Mesh.cpp(89,54): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Study\game_cpp\chapter10\CollisionDetection\CollisionDetection\Actor\Render\Mesh.cpp(89,33): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Study\game_cpp\chapter10\CollisionDetection\CollisionDetection\Actor\Render\Mesh.cpp(127,57): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+  Renderer.cpp
+  Shader.cpp
+  Texture.cpp
+  VertexArray.cpp
+  GameTree.cpp
+  Pathfinding.cpp
+  BallActor.cpp
+  BallMove.cpp
+  BoxComponent.cpp
+  Collision.cpp
+  CollisionDetection.cpp
+  AIComponent.cpp
+  AIState.cpp
+  Generating Code...
+  Compiling...
+  AudioComponent.cpp
+  CameraComponent.cpp
+  FPSCamera.cpp
+  FollowCamera.cpp
+  OrbitCamera.cpp
+  SplineCamera.cpp
+  CircleComponent.cpp
+  Component.cpp
+  AnimSpriteComponent.cpp
+  MeshComponent.cpp
+  SpriteComponent.cpp
+  InputComponent.cpp
+  MoveComponent.cpp
+  NavComponent.cpp
+  Game.cpp
+  MathUtils.cpp
+  Matrix3x3.cpp
+  Matrix4x4.cpp
+  Quarternion.cpp
+  Random.cpp
+  Generating Code...
+  Compiling...
+  Vector2d.cpp
+  Vector3d.cpp
+  PlaneActor.cpp
+  PhysWorld.cpp
+  PreCompiled.cpp
+  AudioSystem.cpp
+  SoundEvent.cpp
+  ControllerState.cpp
+  InputSystem.cpp
+  KeyboardState.cpp
+  MouseState.cpp
+  TargetActor.cpp
+  Generating Code...
+  CollisionDetection.vcxproj -> C:\Study\game_cpp\chapter10\CollisionDetection\x64\Debug\CollisionDetection.exe
+  0개 파일이 복사되었습니다.
+  0개 파일이 복사되었습니다.
+  0개 파일이 복사되었습니다.
+  0개 파일이 복사되었습니다.
